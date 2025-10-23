@@ -5,7 +5,7 @@ const cssOverride = {
 	margin: '0 auto 50px auto',
 };
 
-const Spinner = ({ color = 'blue', size = '50px', cssOverride }) => {
+const Spinner = ({ color = 'blue', size = '10px', cssOverride }) => {
 	return (
 		<div>
 			<ClimbingBoxLoader
