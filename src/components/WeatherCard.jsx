@@ -1,6 +1,8 @@
 import {
 	Cloud,
 	Sun,
+	Moon,
+	CloudMoon,
 	CloudRain,
 	CloudDrizzle,
 	CloudSnow,
@@ -9,7 +11,13 @@ import {
 	Droplets,
 } from 'lucide-react';
 
+import WeatherDetails from './WeatherDetails';
+
+import { useState } from 'react';
+
 const WeatherCard = ({ weather }) => {
+	const [isDetailsVisible, setIsDetailsVisible] = useState(false);
+
 	const cityName = weather?.name;
 	const countryName = weather?.sys?.country;
 	const temp = Math.round(weather?.main?.temp);
@@ -17,20 +25,54 @@ const WeatherCard = ({ weather }) => {
 	const description = weather?.weather[0]?.description;
 	const humidity = weather?.main?.humidity;
 
-	const date = new Date((weather.dt + weather.timezone) * 1000);
-	const day = date.getDate();
-	const month = date.toLocaleString('en-US', { month: 'short' });
-	const year = date.getFullYear().toString().slice(-2);
-	const time = date.toLocaleTimeString('en-US', {
-		hour: '2-digit',
-		minute: '2-digit',
-		hour12: true,
-	});
-	const formatted = `${day}/${month}/${year} ${time}`;
+	const getCurrentCityTime = () => {
+		const now = new Date();
+		const utcTime = now.getTime() + now.getTimezoneOffset() * 60000;
+		const cityTime = new Date(utcTime + weather.timezone * 1000);
+
+		return cityTime.toLocaleString('en-US', {
+			month: 'short',
+			day: 'numeric',
+			year: '2-digit',
+			hour: '2-digit',
+			minute: '2-digit',
+			hour12: true,
+		});
+	};
+
+	const formatted = getCurrentCityTime();
 
 	// Dynamic background based on weather
+	// Check if it's night time
+	const isNight = () => {
+		const now = Math.floor(Date.now() / 1000); // Current time in Unix
+		const sunrise = weather?.sys?.sunrise;
+		const sunset = weather?.sys?.sunset;
+		return now < sunrise || now > sunset;
+	};
+
+	// Dynamic background based on weather AND time of day
 	const getWeatherGradient = () => {
 		const condition = weather?.weather[0]?.main?.toLowerCase();
+		const night = isNight();
+
+		if (night) {
+			switch (condition) {
+				case 'clear':
+					return 'from-indigo-900 via-purple-900 to-blue-900'; // Clear night sky
+				case 'clouds':
+					return 'from-slate-800 via-gray-900 to-zinc-900'; // Cloudy night
+				case 'rain':
+				case 'drizzle':
+					return 'from-slate-900 via-blue-950 to-indigo-950'; // Rainy night
+				case 'snow':
+					return 'from-slate-700 via-blue-900 to-gray-900'; // Snowy night
+				default:
+					return 'from-slate-900 via-purple-950 to-indigo-950'; // Default night
+			}
+		}
+
+		// Day time colors
 		switch (condition) {
 			case 'clear':
 				return 'from-orange-400 via-yellow-300 to-amber-500';
@@ -49,7 +91,44 @@ const WeatherCard = ({ weather }) => {
 
 	const getWeatherIcon = () => {
 		const condition = weather?.weather[0]?.main?.toLowerCase();
+		const night = isNight();
 
+		// Night icons - different colors!
+		if (night) {
+			switch (condition) {
+				case 'clear':
+					return <Moon size={120} className="text-blue-200 drop-shadow-2xl" />;
+				case 'clouds':
+					return (
+						<CloudMoon size={120} className="text-slate-300 drop-shadow-2xl" />
+					);
+				case 'rain':
+					return (
+						<CloudRain size={120} className="text-blue-400 drop-shadow-2xl" />
+					);
+				case 'drizzle':
+					return (
+						<CloudDrizzle
+							size={120}
+							className="text-cyan-400 drop-shadow-2xl"
+						/>
+					);
+				case 'snow':
+					return (
+						<CloudSnow size={120} className="text-blue-200 drop-shadow-2xl" />
+					);
+				case 'mist':
+				case 'fog':
+				case 'haze':
+					return (
+						<CloudFog size={120} className="text-slate-400 drop-shadow-2xl" />
+					);
+				default:
+					return <Wind size={120} className="text-teal-400 drop-shadow-2xl" />;
+			}
+		}
+
+		// Day icons (your existing ones)
 		switch (condition) {
 			case 'clear':
 				return <Sun size={120} className="text-yellow-300 drop-shadow-2xl" />;
@@ -87,7 +166,7 @@ const WeatherCard = ({ weather }) => {
 
 			<div className="relative backdrop-blur-2xl bg-white/10 rounded-[2.5rem] p-10 border border-white/30 shadow-2xl hover:shadow-[0_0_50px_rgba(255,255,255,0.3)] transition-all duration-500 hover:scale-[1.02] rounded-4xl">
 				{/* Header */}
-				<div className="flex justify-between items-start mb-8">
+				<div className="flex justify-between items-start mb-5">
 					<div className="space-y-1">
 						<h1 className="text-5xl font-black text-white drop-shadow-lg tracking-tight">
 							{cityName}
@@ -100,7 +179,7 @@ const WeatherCard = ({ weather }) => {
 				</div>
 
 				{/* Main weather display - side by side */}
-				<div className="flex items-center justify-between gap-12 my-10">
+				<div className="flex items-center justify-between gap-9 my-5">
 					{/* Icon with floating animation */}
 					<div className="animate-bounce-slow">{getWeatherIcon()}</div>
 
@@ -116,6 +195,32 @@ const WeatherCard = ({ weather }) => {
 							Feels like {feelsLike}°C
 						</p>
 					</div>
+				</div>
+				<button
+					onClick={() => setIsDetailsVisible(!isDetailsVisible)}
+					className="w-full mt-6 mb-4 backdrop-blur-lg bg-white/10 hover:bg-white/20 text-white font-semibold py-3 px-6 rounded-2xl border border-white/20 transition-all duration-300 hover:scale-[1.02] flex items-center justify-center gap-2"
+				>
+					{isDetailsVisible ? (
+						<>
+							<span>Show Less</span>
+							<span className="text-xl">▲</span>
+						</>
+					) : (
+						<>
+							<span>Show More Details</span>
+							<span className="text-xl">▼</span>
+						</>
+					)}
+				</button>
+
+				<div
+					className={`transition-all duration-200 overflow-hidden ${
+						isDetailsVisible
+							? 'max-h-[1000px] opacity-100'
+							: 'max-h-0 opacity-0'
+					}`}
+				>
+					<WeatherDetails weather={weather} />
 				</div>
 
 				{/* Bottom section */}
