@@ -1,6 +1,7 @@
 import { useWeather } from './hooks/useWeather';
 import Spinner from './components/Spinner';
 import WeatherCard from './components/WeatherCard';
+import ForecastCard from './components/ForecastCard';
 
 const App = () => {
 	const { weather, forecast, loading, error } = useWeather('Beirut');

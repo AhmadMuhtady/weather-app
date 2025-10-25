@@ -24,7 +24,6 @@ export const useWeather = (city) => {
 
 				setWeather(CurrentWeatherData);
 				setForecast(forecastData);
-				console.log(CurrentWeatherData);
 				console.log(forecastData);
 			} catch (error) {
 				setError(error.message);
