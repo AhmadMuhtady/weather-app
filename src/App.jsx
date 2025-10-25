@@ -1,10 +1,26 @@
+import { useState } from 'react';
 import { useWeather } from './hooks/useWeather';
 import Spinner from './components/Spinner';
 import WeatherCard from './components/WeatherCard';
 import ForecastList from './components/ForecastList';
+import SearchBar from './components/SearchBar';
 
 const App = () => {
-	const { weather, forecast, loading, error } = useWeather('Beirut');
+	const [city, setCity] = useState('Beirut');
+	const [searchInput, setSearchInput] = useState('');
+
+	const onSearchChange = (e) => {
+		setSearchInput(e.target.value);
+	};
+
+	const onSearchClick = () => {
+		if (searchInput.length === 0) {
+			alert('Please Enter a City');
+		}
+		setCity(searchInput);
+	};
+
+	const { weather, forecast, loading, error } = useWeather(city);
 
 	const getPageGradient = () => {
 		if (!weather) return 'from-sky-400 via-blue-500 to-indigo-600';
@@ -80,6 +96,12 @@ const App = () => {
 					<p className="text-white/90 text-lg md:text-xl font-medium">
 						Real-time weather at your fingertips
 					</p>
+
+					<SearchBar
+						onClick={onSearchClick}
+						onChange={onSearchChange}
+						searchInput={searchInput}
+					/>
 				</div>
 
 				{/* Main Content - Stacked for better layout */}
