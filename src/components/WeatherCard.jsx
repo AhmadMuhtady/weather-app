@@ -12,7 +12,6 @@ import {
 } from 'lucide-react';
 
 import WeatherDetails from './WeatherDetails';
-
 import { useState } from 'react';
 
 const WeatherCard = ({ weather }) => {
@@ -33,7 +32,6 @@ const WeatherCard = ({ weather }) => {
 		return cityTime.toLocaleString('en-US', {
 			month: 'short',
 			day: 'numeric',
-			year: '2-digit',
 			hour: '2-digit',
 			minute: '2-digit',
 			hour12: true,
@@ -42,197 +40,124 @@ const WeatherCard = ({ weather }) => {
 
 	const formatted = getCurrentCityTime();
 
-	// Dynamic background based on weather
-	// Check if it's night time
 	const isNight = () => {
-		const now = Math.floor(Date.now() / 1000); // Current time in Unix
+		const now = Math.floor(Date.now() / 1000);
 		const sunrise = weather?.sys?.sunrise;
 		const sunset = weather?.sys?.sunset;
 		return now < sunrise || now > sunset;
 	};
 
-	// Dynamic background based on weather AND time of day
-	const getWeatherGradient = () => {
-		const condition = weather?.weather[0]?.main?.toLowerCase();
-		const night = isNight();
-
-		if (night) {
-			switch (condition) {
-				case 'clear':
-					return 'from-indigo-900 via-purple-900 to-blue-900'; // Clear night sky
-				case 'clouds':
-					return 'from-slate-800 via-gray-900 to-zinc-900'; // Cloudy night
-				case 'rain':
-				case 'drizzle':
-					return 'from-slate-900 via-blue-950 to-indigo-950'; // Rainy night
-				case 'snow':
-					return 'from-slate-700 via-blue-900 to-gray-900'; // Snowy night
-				default:
-					return 'from-slate-900 via-purple-950 to-indigo-950'; // Default night
-			}
-		}
-
-		// Day time colors
-		switch (condition) {
-			case 'clear':
-				return 'from-orange-400 via-yellow-300 to-amber-500';
-			case 'clouds':
-				return 'from-gray-400 via-slate-500 to-gray-600';
-			case 'rain':
-				return 'from-blue-500 via-indigo-600 to-blue-700';
-			case 'drizzle':
-				return 'from-blue-400 via-cyan-500 to-teal-600';
-			case 'snow':
-				return 'from-blue-200 via-slate-300 to-gray-400';
-			default:
-				return 'from-purple-400 via-pink-500 to-rose-500';
-		}
-	};
-
 	const getWeatherIcon = () => {
 		const condition = weather?.weather[0]?.main?.toLowerCase();
 		const night = isNight();
+		const size = 70;
 
-		// Night icons - different colors!
 		if (night) {
 			switch (condition) {
 				case 'clear':
-					return <Moon size={120} className="text-blue-200 drop-shadow-2xl" />;
+					return <Moon size={size} className="text-yellow-200" />;
 				case 'clouds':
-					return (
-						<CloudMoon size={120} className="text-slate-300 drop-shadow-2xl" />
-					);
+					return <CloudMoon size={size} className="text-slate-200" />;
 				case 'rain':
-					return (
-						<CloudRain size={120} className="text-blue-400 drop-shadow-2xl" />
-					);
+					return <CloudRain size={size} className="text-cyan-300" />;
 				case 'drizzle':
-					return (
-						<CloudDrizzle
-							size={120}
-							className="text-cyan-400 drop-shadow-2xl"
-						/>
-					);
+					return <CloudDrizzle size={size} className="text-blue-300" />;
 				case 'snow':
-					return (
-						<CloudSnow size={120} className="text-blue-200 drop-shadow-2xl" />
-					);
+					return <CloudSnow size={size} className="text-blue-100" />;
 				case 'mist':
 				case 'fog':
 				case 'haze':
-					return (
-						<CloudFog size={120} className="text-slate-400 drop-shadow-2xl" />
-					);
+					return <CloudFog size={size} className="text-slate-300" />;
 				default:
-					return <Wind size={120} className="text-teal-400 drop-shadow-2xl" />;
+					return <Wind size={size} className="text-teal-300" />;
 			}
 		}
 
-		// Day icons (your existing ones)
 		switch (condition) {
 			case 'clear':
-				return <Sun size={120} className="text-yellow-300 drop-shadow-2xl" />;
+				return <Sun size={size} className="text-yellow-400" />;
 			case 'clouds':
-				return <Cloud size={120} className="text-gray-300 drop-shadow-2xl" />;
+				return <Cloud size={size} className="text-slate-300" />;
 			case 'rain':
-				return (
-					<CloudRain size={120} className="text-blue-300 drop-shadow-2xl" />
-				);
+				return <CloudRain size={size} className="text-blue-400" />;
 			case 'drizzle':
-				return (
-					<CloudDrizzle size={120} className="text-cyan-300 drop-shadow-2xl" />
-				);
+				return <CloudDrizzle size={size} className="text-cyan-400" />;
 			case 'snow':
-				return (
-					<CloudSnow size={120} className="text-blue-100 drop-shadow-2xl" />
-				);
+				return <CloudSnow size={size} className="text-blue-200" />;
 			case 'mist':
 			case 'fog':
 			case 'haze':
-				return (
-					<CloudFog size={120} className="text-slate-300 drop-shadow-2xl" />
-				);
+				return <CloudFog size={size} className="text-slate-400" />;
 			default:
-				return <Wind size={120} className="text-teal-300 drop-shadow-2xl" />;
+				return <Wind size={size} className="text-teal-400" />;
 		}
 	};
 
 	return (
-		<div className="relative overflow-hidden rounded-4xl">
-			{/* Animated background gradient */}
-			<div
-				className={`absolute inset-0 bg-gradient-to-br ${getWeatherGradient()} opacity-20 blur-3xl animate-pulse`}
-			></div>
-
-			<div className="relative backdrop-blur-2xl bg-white/10 rounded-[2.5rem] p-10 border border-white/30 shadow-2xl hover:shadow-[0_0_50px_rgba(255,255,255,0.3)] transition-all duration-500 hover:scale-[1.02] rounded-4xl">
+		<div className="relative">
+			<div className="bg-white/10 backdrop-blur-md rounded-3xl p-6 border border-white/20 shadow-xl hover:shadow-2xl transition-all duration-300">
 				{/* Header */}
-				<div className="flex justify-between items-start mb-5">
-					<div className="space-y-1">
-						<h1 className="text-5xl font-black text-white drop-shadow-lg tracking-tight">
+				<div className="flex justify-between items-start mb-6">
+					<div>
+						<h1 className="text-4xl md:text-5xl font-bold text-white mb-1">
 							{cityName}
 						</h1>
-						<p className="text-white/80 text-xl font-medium">{countryName}</p>
+						<p className="text-white/80 text-lg">{countryName}</p>
 					</div>
 					<div className="text-right">
-						<p className="text-white/60 text-sm font-medium">{formatted}</p>
+						<p className="text-white/70 text-sm">{formatted}</p>
 					</div>
 				</div>
 
-				{/* Main weather display - side by side */}
-				<div className="flex items-center justify-between gap-9 my-5">
-					{/* Icon with floating animation */}
-					<div className="animate-bounce-slow">{getWeatherIcon()}</div>
+				{/* Main Display */}
+				<div className="flex items-center justify-between gap-6 mb-6">
+					<div className="flex-shrink-0">{getWeatherIcon()}</div>
 
-					{/* Temperature - HUGE and bold */}
-					<div className="text-right">
-						<div className="flex items-start">
-							<span className="text-[140px] font-black text-white leading-none drop-shadow-2xl">
+					<div className="text-right flex-shrink-0">
+						<div className="flex items-start justify-end">
+							<span className="text-7xl md:text-8xl font-black text-white leading-none">
 								{temp}
 							</span>
-							<span className="text-5xl font-bold text-white/80 mt-4">°C</span>
+							<span className="text-3xl md:text-4xl font-bold text-white/90 mt-2">
+								°C
+							</span>
 						</div>
-						<p className="text-white/70 text-2xl mt-4 font-medium">
+						<p className="text-white/80 text-lg mt-2">
 							Feels like {feelsLike}°C
 						</p>
 					</div>
 				</div>
+
+				{/* Description & Humidity */}
+				<div className="flex justify-between items-center py-4 border-t border-white/20 mb-4">
+					<p className="text-2xl text-white capitalize font-semibold">
+						{description}
+					</p>
+
+					<div className="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full">
+						<Droplets className="text-cyan-300" size={20} />
+						<span className="text-white text-lg font-bold">{humidity}%</span>
+					</div>
+				</div>
+
+				{/* Toggle Button */}
 				<button
 					onClick={() => setIsDetailsVisible(!isDetailsVisible)}
-					className="w-full mt-6 mb-4 backdrop-blur-lg bg-white/10 hover:bg-white/20 text-white font-semibold py-3 px-6 rounded-2xl border border-white/20 transition-all duration-300 hover:scale-[1.02] flex items-center justify-center gap-2"
+					className="w-full bg-white/10 hover:bg-white/20 text-white font-medium py-2.5 px-4 rounded-xl border border-white/20 transition-all duration-200 flex items-center justify-center gap-2 text-sm"
 				>
-					{isDetailsVisible ? (
-						<>
-							<span>Show Less</span>
-							<span className="text-xl">▲</span>
-						</>
-					) : (
-						<>
-							<span>Show More Details</span>
-							<span className="text-xl">▼</span>
-						</>
-					)}
+					<span>{isDetailsVisible ? 'Less Details' : 'More Details'}</span>
+					<span className="text-lg">{isDetailsVisible ? '▲' : '▼'}</span>
 				</button>
 
+				{/* Details Section */}
 				<div
-					className={`transition-all duration-200 overflow-hidden ${
+					className={`transition-all duration-300 overflow-hidden ${
 						isDetailsVisible
-							? 'max-h-[1000px] opacity-100'
+							? 'max-h-[800px] opacity-100 mt-4'
 							: 'max-h-0 opacity-0'
 					}`}
 				>
 					<WeatherDetails weather={weather} />
-				</div>
-
-				{/* Bottom section */}
-				<div className="flex justify-between items-center pt-6 border-t border-white/20">
-					<p className="text-3xl text-white capitalize font-semibold drop-shadow-md">
-						{description}
-					</p>
-
-					<div className="flex items-center gap-3 backdrop-blur-xl bg-white/10 px-6 py-3 rounded-full border border-white/20">
-						<Droplets className="text-blue-300" size={28} />
-						<span className="text-white text-2xl font-bold">{humidity}%</span>
-					</div>
 				</div>
 			</div>
 		</div>

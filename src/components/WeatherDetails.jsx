@@ -5,84 +5,106 @@ import {
 	Cloud,
 	Sunrise,
 	Sunset,
-	TrendingUp,
-	TrendingDown,
+	Thermometer,
 } from 'lucide-react';
 
 const WeatherDetails = ({ weather }) => {
 	const wind = weather?.wind?.speed;
 	const pressure = weather?.main?.pressure;
-	const visibility = (weather?.visibility / 1000).toFixed(1); // Convert to km
+	const visibility = (weather?.visibility / 1000).toFixed(1);
 	const clouds = weather?.clouds?.all;
-	const sunrise = new Date(weather?.sys?.sunrise * 1000).toLocaleTimeString();
-	const sunset = new Date(weather?.sys?.sunset * 1000).toLocaleTimeString();
+
+	// Format time without seconds
+	const sunrise = new Date(weather?.sys?.sunrise * 1000).toLocaleTimeString(
+		'en-US',
+		{
+			hour: 'numeric',
+			minute: '2-digit',
+			hour12: true,
+		}
+	);
+	const sunset = new Date(weather?.sys?.sunset * 1000).toLocaleTimeString(
+		'en-US',
+		{
+			hour: 'numeric',
+			minute: '2-digit',
+			hour12: true,
+		}
+	);
+
 	const tempMax = Math.round(weather?.main?.temp_max);
 	const tempMin = Math.round(weather?.main?.temp_min);
+
+	// Stat card component for consistency
+	const StatCard = ({ icon: Icon, label, value, color }) => (
+		<div className="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all duration-200">
+			<div className="flex items-center gap-2 mb-2">
+				<Icon size={18} className={color} />
+				<p className="text-white/80 text-xs font-medium uppercase tracking-wide">
+					{label}
+				</p>
+			</div>
+			<p className="text-white text-xl font-bold">{value}</p>
+		</div>
+	);
+
 	return (
-		<div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-3 mb-3">
-			<div className="backdrop-blur-lg bg-white/10 rounded-2xl p-5 border border-white/20 hover:bg-white/15 transition-all">
-				<div className="flex items-center gap-2 mb-2">
-					<Wind size={20} className="text-cyan-300" />
-					<p className="text-white/70 text-sm font-medium">Wind</p>
-				</div>
-				<p className="text-white text-2xl font-bold">{wind} km/h</p>
-			</div>
+		<div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+			<StatCard
+				icon={Wind}
+				label="Wind"
+				value={`${wind} km/h`}
+				color="text-cyan-400"
+			/>
 
-			<div className="backdrop-blur-lg bg-white/10 rounded-2xl p-5 border border-white/20 hover:bg-white/15 transition-all">
-				<div className="flex items-center gap-2 mb-2">
-					<Gauge size={20} className="text-cyan-300" />
-					<p className="text-white/70 text-sm font-medium">pressure</p>
-				</div>
-				<p className="text-white text-2xl font-bold">{pressure} hPa</p>
-			</div>
+			<StatCard
+				icon={Gauge}
+				label="Pressure"
+				value={`${pressure} hPa`}
+				color="text-purple-400"
+			/>
 
-			<div className="backdrop-blur-lg bg-white/10 rounded-2xl p-5 border border-white/20 hover:bg-white/15 transition-all">
-				<div className="flex items-center gap-2 mb-2">
-					<Eye size={20} className="text-cyan-300" />
-					<p className="text-white/70 text-sm font-medium">visibility</p>
-				</div>
-				<p className="text-white text-2xl font-bold">{visibility} km</p>
-			</div>
+			<StatCard
+				icon={Eye}
+				label="Visibility"
+				value={`${visibility} km`}
+				color="text-blue-400"
+			/>
 
-			<div className="backdrop-blur-lg bg-white/10 rounded-2xl p-5 border border-white/20 hover:bg-white/15 transition-all">
-				<div className="flex items-center gap-2 mb-2">
-					<Cloud size={20} className="text-cyan-300" />
-					<p className="text-white/70 text-sm font-medium">clouds</p>
-				</div>
-				<p className="text-white text-2xl font-bold">{clouds} %</p>
-			</div>
+			<StatCard
+				icon={Cloud}
+				label="Clouds"
+				value={`${clouds}%`}
+				color="text-slate-300"
+			/>
 
-			<div className="backdrop-blur-lg bg-white/10 rounded-2xl p-5 border border-white/20 hover:bg-white/15 transition-all">
-				<div className="flex items-center gap-2 mb-2">
-					<Sunrise size={20} className="text-cyan-300" />
-					<p className="text-white/70 text-sm font-medium">sunrise</p>
-				</div>
-				<p className="text-white text-2xl font-bold">{sunrise}</p>
-			</div>
+			<StatCard
+				icon={Sunrise}
+				label="Sunrise"
+				value={sunrise}
+				color="text-orange-400"
+			/>
 
-			<div className="backdrop-blur-lg bg-white/10 rounded-2xl p-5 border border-white/20 hover:bg-white/15 transition-all">
-				<div className="flex items-center gap-2 mb-2">
-					<Sunset size={20} className="text-cyan-300" />
-					<p className="text-white/70 text-sm font-medium">sunset</p>
-				</div>
-				<p className="text-white text-2xl font-bold">{sunset}</p>
-			</div>
+			<StatCard
+				icon={Sunset}
+				label="Sunset"
+				value={sunset}
+				color="text-pink-400"
+			/>
 
-			<div className="backdrop-blur-lg bg-white/10 rounded-2xl p-5 border border-white/20 hover:bg-white/15 transition-all">
-				<div className="flex items-center gap-2 mb-2">
-					<TrendingUp size={20} className="text-cyan-300" />
-					<p className="text-white/70 text-sm font-medium">Max Temperature</p>
-				</div>
-				<p className="text-white text-2xl font-bold">{tempMax}°C</p>
-			</div>
+			<StatCard
+				icon={Thermometer}
+				label="Max Temp"
+				value={`${tempMax}°C`}
+				color="text-red-400"
+			/>
 
-			<div className="backdrop-blur-lg bg-white/10 rounded-2xl p-5 border border-white/20 hover:bg-white/15 transition-all">
-				<div className="flex items-center gap-2 mb-2">
-					<TrendingDown size={20} className="text-cyan-300" />
-					<p className="text-white/70 text-sm font-medium">Min Temperature</p>
-				</div>
-				<p className="text-white text-2xl font-bold">{tempMin}°C</p>
-			</div>
+			<StatCard
+				icon={Thermometer}
+				label="Min Temp"
+				value={`${tempMin}°C`}
+				color="text-blue-300"
+			/>
 		</div>
 	);
 };

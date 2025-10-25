@@ -1,13 +1,13 @@
 import { useWeather } from './hooks/useWeather';
 import Spinner from './components/Spinner';
 import WeatherCard from './components/WeatherCard';
-import ForecastCard from './components/ForecastCard';
+import ForecastList from './components/ForecastList';
 
 const App = () => {
 	const { weather, forecast, loading, error } = useWeather('Beirut');
 
 	const getPageGradient = () => {
-		if (!weather) return 'from-blue-400 to-purple-500';
+		if (!weather) return 'from-sky-400 via-blue-500 to-indigo-600';
 
 		const condition = weather?.weather[0]?.main?.toLowerCase();
 		const now = Math.floor(Date.now() / 1000);
@@ -16,37 +16,39 @@ const App = () => {
 		if (isNight) {
 			switch (condition) {
 				case 'clear':
-					return 'from-indigo-950 via-purple-950 to-blue-950'; // Starry night
+					return 'from-indigo-950 via-purple-800 to-pink-900'; // Vibrant night sky
 				case 'clouds':
-					return 'from-slate-900 via-gray-900 to-zinc-950'; // Dark cloudy
+					return 'from-slate-900 via-indigo-900 to-purple-900'; // Rich cloudy night
 				case 'rain':
 				case 'drizzle':
-					return 'from-slate-950 via-blue-950 to-indigo-950'; // Night rain
+					return 'from-blue-950 via-indigo-900 to-cyan-950'; // Electric rainy night
+				case 'snow':
+					return 'from-slate-800 via-blue-900 to-indigo-950'; // Snowy night
 				default:
-					return 'from-slate-950 via-purple-950 to-indigo-950';
+					return 'from-purple-950 via-indigo-900 to-blue-950';
 			}
 		}
 
-		// Your existing day colors...
+		// BRIGHT & ALIVE day colors
 		switch (condition) {
 			case 'clear':
-				return 'from-blue-400 via-cyan-400 to-yellow-300';
+				return 'from-sky-400 via-blue-400 to-cyan-300'; // Bright sunny sky
 			case 'clouds':
-				return 'from-slate-500 via-gray-500 to-zinc-600';
+				return 'from-slate-400 via-gray-400 to-blue-400'; // Soft cloudy with blue
 			case 'rain':
-				return 'from-slate-700 via-blue-800 to-indigo-900';
+				return 'from-blue-600 via-cyan-600 to-teal-700'; // Vibrant rainy
 			case 'drizzle':
-				return 'from-blue-500 via-slate-600 to-gray-700';
+				return 'from-cyan-500 via-blue-500 to-indigo-600'; // Fresh drizzle
 			case 'snow':
-				return 'from-blue-200 via-slate-300 to-gray-400';
+				return 'from-blue-300 via-cyan-200 to-sky-300'; // Bright snowy
 			default:
-				return 'from-purple-400 via-pink-500 to-rose-500';
+				return 'from-violet-500 via-purple-500 to-fuchsia-600'; // Colorful default
 		}
 	};
 
 	if (loading) {
 		return (
-			<div className="min-h-screen bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center transition-all duration-1000">
+			<div className="min-h-screen bg-gradient-to-br from-sky-400 via-blue-500 to-indigo-600 flex items-center justify-center">
 				<Spinner color="white" />
 			</div>
 		);
@@ -54,9 +56,9 @@ const App = () => {
 
 	if (error) {
 		return (
-			<div className="min-h-screen bg-gradient-to-br from-red-600 to-orange-700 flex items-center justify-center">
-				<div className="backdrop-blur-lg bg-white/10 rounded-3xl p-8 border border-white/20">
-					<div className="text-white text-2xl font-bold">⚠️ Error: {error}</div>
+			<div className="min-h-screen bg-gradient-to-br from-red-500 via-orange-500 to-pink-600 flex items-center justify-center">
+				<div className="bg-white/20 backdrop-blur-xl rounded-3xl p-8 border-2 border-white/30 shadow-2xl">
+					<div className="text-white text-2xl font-bold">⚠️ {error}</div>
 				</div>
 			</div>
 		);
@@ -64,23 +66,27 @@ const App = () => {
 
 	return (
 		<div
-			className={`min-h-screen bg-gradient-to-br rounded ${getPageGradient()} transition-all duration-1000 p-8`}
+			className={`min-h-screen bg-gradient-to-br ${getPageGradient()} transition-all duration-1000 p-6 md:p-10`}
 		>
-			{/* Animated background overlay */}
-			<div className="absolute inset-0 bg-black/10 backdrop-blur-sm rounded"></div>
+			{/* Animated gradient overlay */}
+			<div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
 
-			<div className="relative max-w-5xl mx-auto space-y-8">
-				{/* Title/Logo */}
-				<div className="text-center mb-8">
-					<h1 className="text-6xl font-black text-white drop-shadow-2xl mb-2">
-						SkyScope ☁️
+			<div className="relative max-w-7xl mx-auto">
+				{/* Header */}
+				<div className="text-center mb-10">
+					<h1 className="text-5xl md:text-6xl font-black text-white drop-shadow-lg mb-2 tracking-tight">
+						SkyScope
 					</h1>
-					<p className="text-white/80 text-xl font-medium">
-						Your Beautiful Weather Companion
+					<p className="text-white/90 text-lg md:text-xl font-medium">
+						Real-time weather at your fingertips
 					</p>
 				</div>
 
-				<WeatherCard weather={weather} />
+				{/* Main Content - Stacked for better layout */}
+				<div className="space-y-6">
+					<WeatherCard weather={weather} />
+					<ForecastList forecast={forecast} />
+				</div>
 			</div>
 		</div>
 	);
