@@ -69,13 +69,13 @@ const App = () => {
 			className={`min-h-screen bg-gradient-to-br ${getPageGradient()} transition-all duration-1000 p-6 md:p-10`}
 		>
 			{/* Animated gradient overlay */}
-			<div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+			<div className="fixed inset-0 z-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none"></div>
 
 			<div className="relative max-w-7xl mx-auto">
 				{/* Header */}
 				<div className="text-center mb-10">
 					<h1 className="text-5xl md:text-6xl font-black text-white drop-shadow-lg mb-2 tracking-tight">
-						SkyScope
+						SkyScope ☁️
 					</h1>
 					<p className="text-white/90 text-lg md:text-xl font-medium">
 						Real-time weather at your fingertips

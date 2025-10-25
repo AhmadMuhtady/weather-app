@@ -25,6 +25,8 @@ const WeatherCard = ({ weather }) => {
 	const humidity = weather?.main?.humidity;
 
 	const getCurrentCityTime = () => {
+		if (!weather || !weather.timezone) return '';
+
 		const now = new Date();
 		const utcTime = now.getTime() + now.getTimezoneOffset() * 60000;
 		const cityTime = new Date(utcTime + weather.timezone * 1000);
