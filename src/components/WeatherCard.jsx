@@ -97,7 +97,7 @@ const WeatherCard = ({ weather }) => {
 
 	return (
 		<div className="relative">
-			<div className="bg-white/10 backdrop-blur-md rounded-3xl p-6 border border-white/20 shadow-xl hover:shadow-2xl transition-all duration-300">
+			<div className="max-w-[500px] min-h-[470px] bg-white/10 backdrop-blur-md rounded-3xl p-6 border border-white/20 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 min-w-[100px]">
 				{/* Header */}
 				<div className="flex justify-between items-start mb-6">
 					<div>
@@ -143,24 +143,6 @@ const WeatherCard = ({ weather }) => {
 				</div>
 
 				{/* Toggle Button */}
-				<button
-					onClick={() => setIsDetailsVisible(!isDetailsVisible)}
-					className="w-full bg-white/10 hover:bg-white/20 text-white font-medium py-2.5 px-4 rounded-xl border border-white/20 transition-all duration-200 flex items-center justify-center gap-2 text-sm"
-				>
-					<span>{isDetailsVisible ? 'Less Details' : 'More Details'}</span>
-					<span className="text-lg">{isDetailsVisible ? '▲' : '▼'}</span>
-				</button>
-
-				{/* Details Section */}
-				<div
-					className={`transition-all duration-300 overflow-hidden ${
-						isDetailsVisible
-							? 'max-h-[800px] opacity-100 mt-4'
-							: 'max-h-0 opacity-0'
-					}`}
-				>
-					<WeatherDetails weather={weather} />
-				</div>
 			</div>
 		</div>
 	);

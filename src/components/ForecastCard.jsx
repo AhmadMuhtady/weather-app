@@ -44,7 +44,7 @@ const ForecastCard = ({ weather }) => {
 	};
 
 	return (
-		<div className="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20 hover:bg-white/15 hover:scale-105 transition-all duration-200 min-w-[140px]">
+		<div className="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20 hover:bg-white/15 hover:scale-105 transition-all duration-200 max-w-[140px]">
 			{/* Day name */}
 			<p className="text-white font-bold text-base mb-0.5">{dayName}</p>
 

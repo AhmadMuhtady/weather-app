@@ -4,6 +4,7 @@ import Spinner from './components/Spinner';
 import WeatherCard from './components/WeatherCard';
 import ForecastList from './components/ForecastList';
 import SearchBar from './components/SearchBar';
+import WeatherDetails from './components/WeatherDetails';
 
 const App = () => {
 	const [city, setCity] = useState('Beirut');
@@ -87,7 +88,7 @@ const App = () => {
 			{/* Animated gradient overlay */}
 			<div className="fixed inset-0 z-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none"></div>
 
-			<div className="relative max-w-7xl mx-auto">
+			<div className="relative max-w-6xl mx-auto">
 				{/* Header */}
 				<div className="text-center mb-10">
 					<h1 className="text-5xl md:text-6xl font-black text-white drop-shadow-lg mb-2 tracking-tight">
@@ -105,9 +106,17 @@ const App = () => {
 				</div>
 
 				{/* Main Content - Stacked for better layout */}
-				<div className="space-y-6">
-					<WeatherCard weather={weather} />
-					<ForecastList forecast={forecast} />
+				<div className="grid grid-cols-1 md:grid-cols-2 gap-3 items-start">
+					{/* Left column */}
+					<div>
+						<WeatherCard weather={weather} />
+					</div>
+
+					{/* Right column */}
+					<div className="space-y-6">
+						<ForecastList forecast={forecast} />
+						<WeatherDetails weather={weather} />
+					</div>
 				</div>
 			</div>
 		</div>
