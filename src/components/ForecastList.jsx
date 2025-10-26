@@ -35,7 +35,7 @@ const ForecastList = ({ forecast }) => {
 				5-Day Forecast
 			</h2>
 
-			<div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4">
+			<div className="grid grid-cols-2 md:grid-cols-5 gap-3">
 				{dailyForecasts.map((day, index) => (
 					<ForecastCard key={index} weather={day} />
 				))}

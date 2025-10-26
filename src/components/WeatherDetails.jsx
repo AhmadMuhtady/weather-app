@@ -37,7 +37,7 @@ const WeatherDetails = ({ weather }) => {
 
 	// Stat card component for consistency
 	const StatCard = ({ icon: Icon, label, value, color }) => (
-		<div className="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20 hover:bg-white/15 transition-all duration-200">
+		<div className="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20 hover:bg-white/15 hover:scale-105 transition-all duration-200">
 			<div className="flex items-center gap-2 mb-2">
 				<Icon size={18} className={color} />
 				<p className="text-white/80 text-xs font-medium uppercase tracking-wide">

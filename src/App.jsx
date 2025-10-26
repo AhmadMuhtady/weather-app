@@ -105,15 +105,11 @@ const App = () => {
 					/>
 				</div>
 
-				{/* Main Content - Stacked for better layout */}
-				<div className="grid grid-cols-1 md:grid-cols-2 gap-3 items-start">
-					{/* Left column */}
+				<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 					<div>
 						<WeatherCard weather={weather} />
 					</div>
-
-					{/* Right column */}
-					<div className="space-y-6">
+					<div className="space-y-6 max-w-3xl">
 						<ForecastList forecast={forecast} />
 						<WeatherDetails weather={weather} />
 					</div>

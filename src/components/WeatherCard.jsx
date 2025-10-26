@@ -11,12 +11,7 @@ import {
 	Droplets,
 } from 'lucide-react';
 
-import WeatherDetails from './WeatherDetails';
-import { useState } from 'react';
-
 const WeatherCard = ({ weather }) => {
-	const [isDetailsVisible, setIsDetailsVisible] = useState(false);
-
 	const cityName = weather?.name;
 	const countryName = weather?.sys?.country;
 	const temp = Math.round(weather?.main?.temp);
@@ -52,7 +47,7 @@ const WeatherCard = ({ weather }) => {
 	const getWeatherIcon = () => {
 		const condition = weather?.weather[0]?.main?.toLowerCase();
 		const night = isNight();
-		const size = 70;
+		const size = 100; // Bigger icon!
 
 		if (night) {
 			switch (condition) {
@@ -96,53 +91,49 @@ const WeatherCard = ({ weather }) => {
 	};
 
 	return (
-		<div className="relative">
-			<div className="max-w-[500px] min-h-[470px] bg-white/10 backdrop-blur-md rounded-3xl p-6 border border-white/20 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 min-w-[100px]">
-				{/* Header */}
-				<div className="flex justify-between items-start mb-6">
-					<div>
-						<h1 className="text-4xl md:text-5xl font-bold text-white mb-1">
-							{cityName}
-						</h1>
-						<p className="text-white/80 text-lg">{countryName}</p>
-					</div>
-					<div className="text-right">
-						<p className="text-white/70 text-sm">{formatted}</p>
-					</div>
+		<div className="bg-white/10 backdrop-blur-md rounded-3xl p-8 border border-white/20 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 transition-all duration-200">
+			{/* Header - More space */}
+			<div className="flex justify-between items-start mb-10">
+				<div>
+					<h1 className="text-5xl md:text-6xl font-bold text-white mb-2">
+						{cityName}
+					</h1>
+					<p className="text-white/80 text-xl">{countryName}</p>
 				</div>
-
-				{/* Main Display */}
-				<div className="flex items-center justify-between gap-6 mb-6">
-					<div className="flex-shrink-0">{getWeatherIcon()}</div>
-
-					<div className="text-right flex-shrink-0">
-						<div className="flex items-start justify-end">
-							<span className="text-7xl md:text-8xl font-black text-white leading-none">
-								{temp}
-							</span>
-							<span className="text-3xl md:text-4xl font-bold text-white/90 mt-2">
-								°C
-							</span>
-						</div>
-						<p className="text-white/80 text-lg mt-2">
-							Feels like {feelsLike}°C
-						</p>
-					</div>
+				<div className="text-right">
+					<p className="text-white/70 text-sm">{formatted}</p>
 				</div>
+			</div>
 
-				{/* Description & Humidity */}
-				<div className="flex justify-between items-center py-4 border-t border-white/20 mb-4">
-					<p className="text-2xl text-white capitalize font-semibold">
-						{description}
-					</p>
+			{/* Main Display - Center everything */}
+			<div className="flex flex-col items-center justify-center mb-10 space-y-8">
+				{/* Icon */}
+				<div>{getWeatherIcon()}</div>
 
-					<div className="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full">
-						<Droplets className="text-cyan-300" size={20} />
-						<span className="text-white text-lg font-bold">{humidity}%</span>
+				{/* Temperature */}
+				<div className="text-center">
+					<div className="flex items-start justify-center">
+						<span className="text-8xl md:text-9xl font-black text-white leading-none">
+							{temp}
+						</span>
+						<span className="text-4xl md:text-5xl font-bold text-white/90 mt-4">
+							°C
+						</span>
 					</div>
+					<p className="text-white/80 text-xl mt-4">Feels like {feelsLike}°C</p>
 				</div>
+			</div>
 
-				{/* Toggle Button */}
+			{/* Description & Humidity */}
+			<div className="flex justify-between items-center pt-6 border-t border-white/20">
+				<p className="text-2xl text-white capitalize font-semibold">
+					{description}
+				</p>
+
+				<div className="flex items-center gap-2 bg-white/10 px-5 py-3 rounded-full">
+					<Droplets className="text-cyan-300" size={24} />
+					<span className="text-white text-xl font-bold">{humidity}%</span>
+				</div>
 			</div>
 		</div>
 	);

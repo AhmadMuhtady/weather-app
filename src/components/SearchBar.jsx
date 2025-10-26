@@ -5,7 +5,7 @@ const SearchBar = ({ onClick, onChange, searchInput, required = false }) => {
 				type="text"
 				value={searchInput}
 				onChange={onChange}
-				required
+				required={required}
 				placeholder="Enter a City Name..."
 				className="rounded-xl Semi-transparent background bg-white/10 placeholder-white/60 px-4 py-2 border border-grey/20 focus:outline-none focus:ring-2 focus:ring-white/50 m-5 text-white"
 			/>
